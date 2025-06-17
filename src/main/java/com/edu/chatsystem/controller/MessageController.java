@@ -3,7 +3,9 @@ package com.edu.chatsystem.controller;
 import com.edu.chatsystem.configuration.Constants;
 import com.edu.chatsystem.dto.MessageDto;
 import com.edu.chatsystem.model.MessageEntity;
+import com.edu.chatsystem.service.ChatService;
 import com.edu.chatsystem.service.MessageService;
+import com.edu.chatsystem.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,24 +16,53 @@ import java.util.List;
 @RequestMapping(Constants.API_URL + "/message")
 public class MessageController {
     private final MessageService messageService;
+    private final UserService userService;
+    private final ChatService chatService;
     private final ModelMapper modelMapper;
 
-    public MessageController(MessageService messageService, ModelMapper modelMapper) {
+    public MessageController(MessageService messageService, UserService userService, ChatService chatService, ModelMapper modelMapper) {
         this.messageService = messageService;
+        this.userService = userService;
+        this.chatService = chatService;
         this.modelMapper = modelMapper;
     }
 
     private MessageDto toDto(MessageEntity entity) {
-        return modelMapper.map(entity, MessageDto.class);
+        return new MessageDto(
+                entity.getId(),
+                entity.getChat().getId(),
+                entity.getUser().getId(),
+                entity.getText(),
+                entity.getIsFavorite(),
+                entity.getCreatedAt()
+        );
     }
 
     private MessageEntity toEntity(MessageDto dto) {
-        return modelMapper.map(dto, MessageEntity.class);
+        if (dto.getUserId() == null)
+        {
+            return new MessageEntity(
+                    dto.getText()
+            );
+        }
+
+        return new MessageEntity(
+                chatService.get(dto.getChatId()),
+                userService.get(dto.getUserId()),
+                dto.getText(),
+                dto.isFavorite(),
+                dto.getCreatedAt()
+        );
     }
 
     @GetMapping
     public List<MessageDto> getAll() {
         return messageService.getAll().stream().map(this::toDto).toList();
+    }
+
+    @GetMapping("/chat/{id}")
+    public List<MessageDto> getAllByChat(@PathVariable(name = "id") Long chat_id) {
+        return messageService.getAllbyChat(chat_id).stream().map(this::toDto).toList();
     }
 
     @GetMapping("/{id}")

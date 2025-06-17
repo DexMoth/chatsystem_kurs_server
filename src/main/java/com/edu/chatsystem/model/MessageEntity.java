@@ -22,18 +22,24 @@ public class MessageEntity extends BaseEntity {
     @Column(nullable = false, length = 4096)
     private String text;
 
-    //@Column(nullable = false)
-    //private LocalDateTime createdAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
 
-    private boolean isFavorite;
+    private boolean isFavorite = false;
 
     public MessageEntity() {
     }
 
-    public MessageEntity(ChatEntity chat, UserEntity user, String text) {
+    public MessageEntity(String text) {
+        this.text = text;
+    }
+
+    public MessageEntity(ChatEntity chat, UserEntity user, String text, boolean isFavorite, LocalDateTime createdAt) {
         this.chat = chat;
         this.user = user;
         this.text = text;
+        this.isFavorite = isFavorite;
+        this.createdAt = createdAt;
     }
 
     public ChatEntity getChat() {
@@ -59,13 +65,14 @@ public class MessageEntity extends BaseEntity {
         this.text = text;
     }
 
-    /*public LocalDateTime getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    }*/
+
     public boolean getIsFavorite() {
         return isFavorite;
     }

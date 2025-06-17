@@ -1,11 +1,13 @@
 package com.edu.chatsystem.service;
 
 import com.edu.chatsystem.error.NotFoundException;
+import com.edu.chatsystem.model.ChatEntity;
 import com.edu.chatsystem.model.MessageEntity;
 import com.edu.chatsystem.repository.MessageRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -19,6 +21,12 @@ public class MessageService {
     public List<MessageEntity> getAll() {
         return StreamSupport.stream(repository.findAll().spliterator(), false).toList();
     }
+
+    @Transactional
+    public List<MessageEntity> getAllbyChat(Long chatId) {
+        return StreamSupport.stream(repository.findByChatId(chatId).spliterator(), false).toList();
+    }
+
     @Transactional
     public MessageEntity get(Long id) {
         return repository.findById(id)
@@ -29,6 +37,7 @@ public class MessageService {
         if (entity == null) {
             throw new IllegalArgumentException("Entity is null");
         }
+        entity.setCreatedAt(LocalDateTime.now());
         return repository.save(entity);
     }
 
@@ -36,6 +45,13 @@ public class MessageService {
     public MessageEntity update(Long id, MessageEntity ent) {
         final MessageEntity el = get(id);
         el.setText(ent.getText());
+        return repository.save(el);
+    }
+
+    @Transactional
+    public MessageEntity setFavorite(Long id, MessageEntity ent) {
+        final MessageEntity el = get(id);
+        el.setIsFavorite(ent.getIsFavorite());
         return repository.save(el);
     }
 

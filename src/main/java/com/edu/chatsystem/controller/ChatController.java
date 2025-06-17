@@ -49,9 +49,14 @@ public class ChatController {
     private ChatEntity toEntity(ChatDto dto) {
 
         var ent = modelMapper.map(dto, ChatEntity.class);
-        var members = dto.getMemberIds();
-        for (var member : members) {
-            ent.addMember(userService.get(member));
+        if (dto.getMemberIds() != null)
+        {
+            var members = dto.getMemberIds();
+            if (members.isEmpty()) {
+                for (var member : members) {
+                    ent.addMember(userService.get(member));
+                }
+            }
         }
         return ent;
     }

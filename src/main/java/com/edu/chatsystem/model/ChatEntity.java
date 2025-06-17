@@ -12,8 +12,6 @@ import java.util.Objects;
 @Data
 public class ChatEntity extends BaseEntity {
     private String name;
-       /* @ManyToMany(mappedBy = "chats")
-        private Set<UserEntity> members = new HashSet<>();*/
     @ManyToMany
     @JoinTable(
            name = "user_chat",

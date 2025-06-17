@@ -1,7 +1,6 @@
 package com.edu.chatsystem.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -11,10 +10,46 @@ public class MessageDto {
     private Long userId;
     private String text;
     private boolean isFavorite;
+    private LocalDateTime createdAt;
 
     public MessageDto() {}
+    public MessageDto(Long chatId, Long userId, String text, LocalDateTime createdAt)
+    {
+        this.chatId = chatId;
+        this.userId = userId;
+        this.text = text;
+        this.isFavorite = false;
+        this.createdAt = createdAt;
+    }
 
-    ;
+    public MessageDto(Long id, Long chatId, Long userId, String text)
+    {
+        this.id = id;
+        this.chatId = chatId;
+        this.userId = userId;
+        this.text = text;
+        this.isFavorite = false;
+    }
+
+    public MessageDto(Long id, Long chatId, Long userId, String text, boolean isFavorite)
+    {
+       this.id = id;
+       this.chatId = chatId;
+       this.userId = userId;
+       this.text = text;
+       this.isFavorite = isFavorite;
+    }
+
+    public MessageDto(Long id, Long chatId, Long userId, String text, boolean isFavorite, LocalDateTime createdAt)
+    {
+        this.id = id;
+        this.chatId = chatId;
+        this.userId = userId;
+        this.text = text;
+        this.isFavorite = isFavorite;
+        this.createdAt = createdAt;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -32,9 +67,10 @@ public class MessageDto {
         this.text = text;
     }
 
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
+    public void setFavorite(boolean isFavorite) {
+        this.isFavorite = isFavorite;
     }
+    public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
     public Long getId() {
         return id;
     }
@@ -54,4 +90,8 @@ public class MessageDto {
     public boolean isFavorite() {
         return isFavorite;
     }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
 }

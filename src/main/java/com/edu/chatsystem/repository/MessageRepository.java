@@ -14,7 +14,7 @@ public interface MessageRepository extends JpaRepository<MessageEntity, Long> {
     @Query("SELECT m FROM MessageEntity m " +
             "JOIN FETCH m.user u " +
             "JOIN m.chat c " +
-            "WHERE c.id = :chatId ")
-//             "ORDER BY m.createdAt ASC") //сортировка по дате
+            "WHERE c.id = :chatId " +
+            "ORDER BY m.createdAt ASC") //сортировка по дате
     List<MessageEntity> findByChatId(@Param("chatId") Long chatId);
 }

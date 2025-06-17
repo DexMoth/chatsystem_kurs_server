@@ -5,6 +5,7 @@ import com.edu.chatsystem.model.ChatEntity;
 import com.edu.chatsystem.model.MessageEntity;
 import com.edu.chatsystem.repository.MessageRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,6 +41,7 @@ public class MessageService {
         entity.setCreatedAt(LocalDateTime.now());
         return repository.save(entity);
     }
+
 
     @Transactional
     public MessageEntity update(Long id, MessageEntity ent) {

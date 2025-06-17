@@ -16,12 +16,6 @@ public class UserEntity extends BaseEntity {
     private String password;
     private String phone;
     private String reportCardNumber;
-    /*@ManyToMany
-    @JoinTable(
-            name = "user_chat",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id"))
-    private Set<ChatEntity> chats = new HashSet<>();*/
 
     public UserEntity() {
     }

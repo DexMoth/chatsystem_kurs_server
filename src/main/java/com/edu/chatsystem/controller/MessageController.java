@@ -47,7 +47,6 @@ public class MessageController {
                 entity.getCreatedAt(),
                 new ArrayList<>());
 
-
         var files = entity.getAttachments();
         for (var file : files) {
             var f = new FileDto(
@@ -79,22 +78,25 @@ public class MessageController {
         );
     }
 
-    private MessageEntity toEntity(MessageDto dto, MultipartFile file) {
+    private MessageEntity toEntity(MessageDto dto, List<MultipartFile> files) {
         MessageEntity ent = toEntity(dto); // Используем существующий метод
 
         if (ent.getAttachments() == null) {
             ent.setAttachments(new ArrayList<>());
         }
 
-        if (file != null && !file.isEmpty()) {
-            FileEntity fileEntity = new FileEntity(); // Создаем новый объект
-            fileEntity.setName(file.getOriginalFilename());
-            fileEntity.setType(file.getContentType());
-            try {
-                fileEntity.setData(file.getBytes());
-                ent.getAttachments().add(fileEntity); // Добавляем новый файл
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to process file", e);
+        if (files != null && !files.isEmpty()) {
+            for (var file : files) {
+                FileEntity fileEntity = new FileEntity();
+                fileEntity.setName(file.getOriginalFilename());
+                fileEntity.setType(file.getContentType());
+                fileEntity.setMessage(ent);
+                try {
+                    fileEntity.setData(file.getBytes());
+                    ent.getAttachments().add(fileEntity);
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to process file", e);
+                };
             }
         }
         return ent;
@@ -106,8 +108,12 @@ public class MessageController {
     }
 
     @GetMapping("/chat/{id}")
-    public List<MessageDto> getAllByChat(@PathVariable(name = "id") Long chat_id) {
-        return messageService.getAllbyChat(chat_id).stream().map(this::toDto).toList();
+    public ResponseEntity<List<MessageDto>> getAllByChat(@PathVariable(name = "id") Long chat_id) {
+        List<MessageEntity> messages = messageService.getAllbyChat(chat_id);
+        if (messages.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(messages.stream().map(this::toDto).toList());
     }
 
     @GetMapping("/{id}")
@@ -122,10 +128,10 @@ public class MessageController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<MessageDto> create(
-            @RequestPart MessageDto dto,
-            @RequestPart(required = false) MultipartFile file) {
+            @RequestPart("dto") @Valid MessageDto dto,
+            @RequestPart(value = "files", required = false) List<MultipartFile> files) {
 
-        MessageDto createdMessage = toDto(messageService.create(toEntity(dto, file)));
+        MessageDto createdMessage = toDto(messageService.create(toEntity(dto, files)));
         return ResponseEntity.ok(createdMessage);
     }
 

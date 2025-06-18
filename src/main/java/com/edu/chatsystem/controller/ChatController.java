@@ -52,7 +52,7 @@ public class ChatController {
         if (dto.getMemberIds() != null)
         {
             var members = dto.getMemberIds();
-            if (members.isEmpty()) {
+            if (!members.isEmpty()) {
                 for (var member : members) {
                     ent.addMember(userService.get(member));
                 }

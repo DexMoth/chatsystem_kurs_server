@@ -49,7 +49,7 @@ public class FileEntity extends BaseEntity{
     public MessageEntity getMessage() {
         return message;
     }
-    public void setMessage(MessageEntity data) {
+    public void setMessage(MessageEntity message) {
         this.message = message;
     }
 }

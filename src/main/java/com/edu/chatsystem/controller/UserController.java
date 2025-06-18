@@ -60,6 +60,7 @@ public class UserController {
                 user.getId(),
                 user.getLogin(),
                 user.getName(),
+                user.getPassword(),
                 user.getPhone(),
                 user.getReportCardNumber()
         ));

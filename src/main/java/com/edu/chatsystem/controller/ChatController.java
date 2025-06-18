@@ -76,7 +76,7 @@ public class ChatController {
         return toDto(chatService.get(id));
     }
 
-    @PutMapping("/{id}/users")
+    @PutMapping("/{id}/confirm")
     public ChatDto addUser(
             @PathVariable(name = "id") Long id,
             @RequestBody Long userId) {

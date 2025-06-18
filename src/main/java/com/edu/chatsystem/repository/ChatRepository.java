@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ChatRepository extends JpaRepository<ChatEntity, Long> {
-    @Query("SELECT DISTINCT c FROM ChatEntity c JOIN c.members m WHERE m.id = :userId")
+    @Query("SELECT DISTINCT c FROM ChatEntity c " +
+            "LEFT JOIN FETCH c.members m " +
+            "WHERE m.id = :userId")
     List<ChatEntity> findByUserId(@Param("userId") Long userId);
     @Query("SELECT c FROM ChatEntity c LEFT JOIN FETCH c.members WHERE c.id = :id")
     Optional<ChatEntity> findByIdWithMembers(@Param("id") Long id);

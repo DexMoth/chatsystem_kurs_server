@@ -2,6 +2,7 @@ package com.edu.chatsystem.dto;
 
 import com.edu.chatsystem.model.UserEntity;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class ChatDto {

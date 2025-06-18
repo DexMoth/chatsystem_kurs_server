@@ -46,6 +46,7 @@ public class UserService {
         user.setPassword(entity.getPassword());
         user.setName(entity.getName());
         user.setPhone(entity.getPhone());
+        user.setAvatar(entity.getAvatar());
         return repository.save(user);
     }
 

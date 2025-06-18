@@ -38,7 +38,8 @@ public class UserController {
                 entity.getName(),
                 entity.getPassword(),
                 entity.getPhone(),
-                entity.getReportCardNumber()
+                entity.getReportCardNumber(),
+                entity.getAvatar()
         );
     }
 
@@ -62,7 +63,8 @@ public class UserController {
                 user.getName(),
                 user.getPassword(),
                 user.getPhone(),
-                user.getReportCardNumber()
+                user.getReportCardNumber(),
+                user.getAvatar()
         ));
     }
 

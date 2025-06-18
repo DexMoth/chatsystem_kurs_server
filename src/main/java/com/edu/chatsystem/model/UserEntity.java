@@ -16,6 +16,8 @@ public class UserEntity extends BaseEntity {
     private String password;
     private String phone;
     private String reportCardNumber;
+    @Column(name = "avatar", columnDefinition = "TEXT")
+    private String avatar;
 
     public UserEntity() {
     }
@@ -31,6 +33,15 @@ public class UserEntity extends BaseEntity {
         this.password = password;
         this.phone = phone;
         this.reportCardNumber = reportCardNumber;
+    }
+
+    public UserEntity(String login, String name, String password, String phone, String reportCardNumber, String avatar) {
+        this.login = login;
+        this.name = name;
+        this.password = password;
+        this.phone = phone;
+        this.reportCardNumber = reportCardNumber;
+        this.avatar = avatar;
     }
     public String getPassword() {
         return password;
@@ -71,6 +82,12 @@ public class UserEntity extends BaseEntity {
         this.phone = phone;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     @Override
     public boolean equals(Object obj) {

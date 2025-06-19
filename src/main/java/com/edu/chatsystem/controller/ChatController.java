@@ -9,6 +9,7 @@ import com.edu.chatsystem.service.ChatService;
 import com.edu.chatsystem.service.UserService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -98,5 +99,30 @@ public class ChatController {
     @DeleteMapping("/{id}")
     public ChatDto delete(@PathVariable(name = "id") Long id) {
         return toDto(chatService.delete(id));
+    }
+
+    @DeleteMapping("/{chatId}/members/{userId}")
+    public ChatDto removeMember(
+            @PathVariable Long chatId,
+            @PathVariable Long userId) {
+        return toDto(chatService.removeMember(chatId, userId));
+    }
+
+
+    // Генерация простой ссылки (без токена)
+    @GetMapping("/{chatId}/invite-link")
+    public ResponseEntity<String> getInviteLink(@PathVariable Long chatId) {
+        String link = "http://localhost:5173/join-chat/" + chatId;
+        return ResponseEntity.ok(link);
+    }
+
+    // Присоединение по ID чата
+    @PostMapping("/{chatId}/join")
+    public ResponseEntity<?> joinChat(
+            @PathVariable Long chatId,
+            @RequestParam Long userId) {
+
+        chatService.addUser(chatId, userId);
+        return ResponseEntity.ok().build();
     }
 }

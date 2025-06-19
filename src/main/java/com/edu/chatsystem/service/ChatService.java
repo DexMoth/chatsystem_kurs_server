@@ -45,6 +45,21 @@ public class ChatService {
     }
 
     @Transactional
+    public ChatEntity removeMember(Long chatId, Long userId) {
+        ChatEntity chat = repository.findById(chatId)
+                .orElseThrow(() -> new RuntimeException("Chat not found"));
+
+        UserEntity user = repositoryUser.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (chat.getMembers().contains(user)) {
+            chat.removeMember(user);
+            return repository.save(chat);
+        }
+        throw new RuntimeException("User is not a member of this chat");
+    }
+
+    @Transactional
     public ChatEntity create(ChatEntity entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity is null");

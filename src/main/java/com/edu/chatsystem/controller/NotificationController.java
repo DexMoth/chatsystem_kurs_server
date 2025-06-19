@@ -23,17 +23,16 @@ public class NotificationController {
         this.chatService = chatService;
         this.userService = userService;
     }
-
     @PostMapping("/chat-invite")
     public ResponseEntity<?> sendChatInvitation(
             @RequestBody ChatInvitationDto request) {
-        String chatLink = "http://localhost:5173/" + request.getChatId() + "/confirm";
+        String chatLink = "http://localhost:5173/join-chat/" + request.getChatId();
 
         request.getRecipientEmails().forEach(email -> {
             emailService.sendEmail(
                     email,
                     "Приглашение в чат: " + request.getChatName(),
-                    buildInvitationEmailContent(request.getInviterName(), chatLink)
+                    request.getInviterName() + " приглашает вас в чат. Перейдите по ссылке: " + chatLink
             );
         });
 
